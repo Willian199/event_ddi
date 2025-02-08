@@ -1,0 +1,23 @@
+name: event_ddi
+description: "A Dart package designed for event management. It provides tools to create, destroy, and listen to events."
+version: 0.0.1
+homepage: https://github.com/Willian199/event_ddi
+issue_tracker: https://github.com/Willian199/event_ddi/issues
+tags:
+  - dependency
+  - package
+  - inject
+  - management
+
+topics:
+  - dependency-injection
+  - event
+  - inject
+  - cdi
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dev_dependencies:
+  test: ">=1.25.8 <2.0.0"
+  lints: ^4.0.0
