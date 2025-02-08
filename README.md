@@ -48,7 +48,6 @@ A Dart package designed for event management. It provides tools to create, destr
 
 - [Budgetopia](https://github.com/Willian199/budgetopia) - An intuitive personal finance app that helps users track expenses.
 
-## Event Management Guide
 
 ## Creating and Managing Events
 The Events follow a straightforward flow. Functions or methods `subscribe` to specific events using the subscribe method of the `DDIEvent` class. Events are fired using the `fire` or `fireWait` methods, triggering the execution of all subscribed callbacks. Subscribed callbacks are then executed, handling the event data and performing any specified tasks. Subscriptions can be removed using the `unsubscribe` function.
@@ -60,8 +59,8 @@ When subscribing to an event, you have the option to choose from three different
 - `DDIEvent.instance.subscribeAsync` Runs the callback as a Future.
 - `DDIEvent.instance.subscribeIsolate` Runs as a Isolate.
 
-#### subscribe
-The common subscription type, subscribe, functions as a simple callback. It allows you to respond to events in a synchronous manner, making it suitable for most scenarios.
+#### Subscribe
+The common subscription type, `subscribe`, functions as a simple callback. It allows you to respond to events in a synchronous manner, making it suitable for most scenarios.
 
 Obs: If you register an event that uses async and await, it Won't be possible to wait even using `fireWait`. For this scenario, use `subscribeAsync`.
 
@@ -119,8 +118,8 @@ DDIEvent.instance.subscribe<String>(
 );
 ```
 
-#### subscribeAsync
-The subscribeAsync type runs the callback as a Future, allowing for asynchronous event handling. Making it suitable for scenarios where asynchronous execution is needed without waiting for completion.
+#### Subscribe Async
+The `subscribeAsync` type runs the callback as a Future, allowing for asynchronous event handling. Making it suitable for scenarios where asynchronous execution is needed without waiting for completion.
 Note that it not be possible to await this type of subscription.
 
 Obs: If you want to await for the event to be completed, fire it using `fireWait`.
@@ -150,8 +149,8 @@ DDIEvent.instance.subscribeAsync<String>(
 );
 ```
 
-#### subscribeIsolate
-The subscribeIsolate type runs the callback in a separate isolate, enabling concurrent event handling. This is particularly useful for scenarios where you want to execute the event in isolation, avoiding potential interference with the main application flow.
+#### Subscribe Isolate
+The `subscribeIsolate` type runs the callback in a separate isolate, enabling concurrent event handling. This is particularly useful for scenarios where you want to execute the event in isolation, avoiding potential interference with the main application flow.
 
 Parameters are the same as for `subscribe`.
 
