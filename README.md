@@ -33,8 +33,6 @@ A Dart package designed for event management. It provides tools to create, destr
 
 - Flexible Subscriptions: Support for synchronous, asynchronous, and isolate-based event subscriptions.
 
-- Streamlined Communication: Decouple components by leveraging powerful event-based communication.
-
 - Replay and Undo: Support for event replay and undo functionalities.
 
 - Qualifiers: Use qualifiers to distinguish between different event types.
@@ -236,9 +234,9 @@ The `getValue` method retrieves the current value of the last event fired. This 
 final EventType value = DDIEvent.instance.getValue<EventType>(qualifier: 'exampleEvent');
 ```
 
-### `DDIEventSender` Mixins
+### DDIEvent Sender Mixin
 
-The `DDIEventSender` mixins are designed to simplify the process of sending events values to listeners. They provide a convenient method fire to send the specified value to an event or stream.
+The `DDIEventSender` mixin was designed to simplify the process of sending events values to listeners. They provide the method `fire` to send the specified value to an event.
 
 #### Example Usage:
 ```dart
