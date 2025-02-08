@@ -174,6 +174,9 @@ void eventTest() {
       DDIEvent.instance.fire(1);
 
       expect(localValue, 1);
+      DDIEvent.instance.unsubscribe<int>(eventFunction);
+
+      expect(ddiEvent.isRegistered<int>(), isFalse);
     });
 
     test('subscribe a non canUnsubscribe event', () {
@@ -377,6 +380,7 @@ void eventTest() {
 
       expect(value, 1);
       expect(ddiEvent.isRegistered<int>(qualifier: 'duplicat_test'), false);
+      expect(ddiEvent.isRegistered<int>(), isFalse);
     });
 
     test('FireWait removes events marked for unsubscription', () async {
@@ -401,6 +405,7 @@ void eventTest() {
           throwsA(isA<EventNotFoundException>()));
 
       expect(ddiEvent.isRegistered<int>(qualifier: 'removeAfterFire'), isFalse);
+      expect(ddiEvent.isRegistered<int>(), isFalse);
     });
 
     test(
@@ -410,6 +415,27 @@ void eventTest() {
 
       expect(() => ddiEvent.unsubscribe<String>(event, qualifier: 'qualifier'),
           throwsA(isA<EventNotFoundException>()));
+    });
+    test('Subscribe with a Future canRegister', () async {
+      expect(ddiEvent.isRegistered<int>(), isFalse);
+      int localValue = 0;
+      void eventFunction(int value) => localValue += value;
+
+      await DDIEvent.instance.subscribe<int>(
+        eventFunction,
+        canRegister: () async {
+          await Future.delayed(const Duration(milliseconds: 100));
+          return false;
+        },
+      );
+
+      expect(ddiEvent.isRegistered<int>(), isFalse);
+      expect(localValue, 0);
+
+      expect(() => DDIEvent.instance.fire(1, canReplay: false),
+          throwsA(isA<EventNotFoundException>()));
+
+      expect(localValue, 0);
     });
   });
 }

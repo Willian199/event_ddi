@@ -8,7 +8,7 @@ import 'package:event_ddi/src/exception/event_not_allowed.dart';
 import 'package:event_ddi/src/exception/event_not_found.dart';
 import 'package:event_ddi/src/typedef/typedef.dart';
 
-part 'dart_ddi_event_impl.dart';
+part 'ddi_event_impl.dart';
 
 /// Shortcut for getting the shared instance of the [DDIEvent] class.
 /// The [DDIEvent] class provides methods for subscribing and unsubscribing to events.

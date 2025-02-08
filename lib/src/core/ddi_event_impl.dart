@@ -1,6 +1,6 @@
-part of 'dart_ddi_event.dart';
+part of 'ddi_event.dart';
 
-class _DDIEventImpl implements DDIEvent {
+final class _DDIEventImpl implements DDIEvent {
   final Map<Object, List<Event<Object>>> _events = {};
   final Map<Object, History> _valueHistory = {};
 
@@ -427,7 +427,8 @@ class _DDIEventImpl implements DDIEvent {
 
       history.redoStack.add(lastValue);
 
-      if (!isRegistered<EventTypeT>(qualifier: effectiveQualifierName)) {
+      if (history.undoStack.isEmpty ||
+          !isRegistered<EventTypeT>(qualifier: effectiveQualifierName)) {
         return;
       }
 

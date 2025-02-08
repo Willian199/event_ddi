@@ -284,11 +284,11 @@ void eventUndoRedoTest() {
       expect(ddiEvent.isRegistered<String>(), false);
     });
 
-    test('Unsubscribe prevents future executions', () async {
+    test('Unsubscribe prevents future executions', () {
       int executionCount = 0;
 
       void callback(num value) => executionCount++;
-      await ddiEvent.subscribe<num>(callback);
+      ddiEvent.subscribe<num>(callback);
 
       ddiEvent.fire<num>(1);
       expect(executionCount, 1);
@@ -299,6 +299,52 @@ void eventUndoRedoTest() {
 
       ddiEvent.clearHistory<num>();
       expect(ddiEvent.isRegistered<num>(), false);
+    });
+
+    test('Undo and Redo max history', () async {
+      int executionCount = 0;
+
+      void callback(num value) => executionCount++;
+      ddiEvent.subscribe<num>(callback);
+
+      expect(ddiEvent.isRegistered<num>(), isTrue);
+
+      for (int i = 1; i < 7; i++) {
+        ddiEvent.fire<num>(i);
+      }
+
+      expect(ddiEvent.getValue<num>(), 6);
+      expect(executionCount, 6);
+
+      for (int i = 1; i <= 4; i++) {
+        ddiEvent.undo<num>();
+      }
+
+      expect(ddiEvent.getValue<num>(), 2);
+      expect(executionCount, 10);
+
+      ddiEvent.undo<num>();
+
+      expect(ddiEvent.getValue<num>(), null);
+      expect(executionCount, 10);
+
+      for (int i = 1; i <= 5; i++) {
+        ddiEvent.redo<num>();
+      }
+
+      expect(ddiEvent.getValue<num>(), 6);
+      expect(executionCount, 15);
+
+      ddiEvent.redo<num>();
+      ddiEvent.redo<num>();
+
+      expect(ddiEvent.getValue<num>(), 6);
+      expect(executionCount, 15);
+
+      ddiEvent.clearHistory<num>();
+
+      ddiEvent.unsubscribe<num>(callback);
+      expect(ddiEvent.isRegistered<num>(), isFalse);
     });
   });
 }

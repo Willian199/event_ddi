@@ -17,6 +17,7 @@ and the Flutter guide for
 
 [![pub package](https://img.shields.io/pub/v/event_ddi.svg?logo=dart&logoColor=00b9fc)](https://pub.dartlang.org/packages/event_ddi)
 [![CI](https://img.shields.io/github/actions/workflow/status/Willian199/event_ddi/dart.yml?branch=master&logo=github-actions&logoColor=white)](https://github.com/Willian199/event_ddi/actions)
+[![Coverage Status](https://coveralls.io/repos/github/Willian199/event_ddi/badge.svg?branch=master)](https://coveralls.io/github/Willian199/event_ddi?branch=master)
 [![Last Commits](https://img.shields.io/github/last-commit/Willian199/event_ddi?logo=git&logoColor=white)](https://github.com/Willian199/event_ddi/commits/master)
 [![Issues](https://img.shields.io/github/issues/Willian199/event_ddi?logo=github&logoColor=white)](https://github.com/Willian199/event_ddi/issues)
 [![Pull Requests](https://img.shields.io/github/issues-pr/Willian199/event_ddi?logo=github&logoColor=white)](https://github.com/Willian199/event_ddi/pulls)

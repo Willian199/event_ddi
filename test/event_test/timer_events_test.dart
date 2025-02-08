@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:event_ddi/event_ddi.dart';
+import 'package:event_ddi/src/exception/event_not_allowed.dart';
 import 'package:event_ddi/src/exception/event_not_found.dart';
 import 'package:test/test.dart';
 
@@ -495,6 +496,42 @@ void eventDurationTests() {
       expect(finalValue, 5);
       // After the executions, the event should be removed
       expect(ddiEvent.isRegistered<int>(qualifier: 'run_finite_test'), isFalse);
+    });
+
+    test('Subscribe Multiple periodic event with autoRun', () async {
+      void mockEvent(int value) => {};
+      const defaultValue = 42;
+      const maxExecutions = 5;
+      const invalidretryInterval = Duration(milliseconds: 200);
+
+      ddiEvent.subscribe<int>(
+        mockEvent,
+        autoRun: true,
+        retryInterval: invalidretryInterval,
+        defaultValue: defaultValue,
+        maxRetry: maxExecutions,
+        qualifier: 'multiple_duration_test',
+      );
+
+      expect(ddiEvent.isRegistered<int>(qualifier: 'multiple_duration_test'),
+          isTrue);
+
+      expect(
+        () => ddiEvent.subscribe<int>(
+          mockEvent,
+          autoRun: true,
+          retryInterval: invalidretryInterval,
+          defaultValue: defaultValue,
+          maxRetry: maxExecutions,
+          qualifier: 'multiple_duration_test',
+        ),
+        throwsA(isA<EventNotAllowedException>()),
+      );
+
+      // Ensure event is not registered
+      ddiEvent.unsubscribe<int>(mockEvent, qualifier: 'multiple_duration_test');
+      expect(ddiEvent.isRegistered<int>(qualifier: 'multiple_duration_test'),
+          isFalse);
     });
   });
 }

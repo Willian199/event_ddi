@@ -293,5 +293,34 @@ void eventFilterTest() {
 
       expect(ddiEvent.isRegistered(qualifier: 'async_event'), isFalse);
     });
+
+    test('Subscribe event with Future filter', () async {
+      int count = 0;
+
+      void callback(int value) => count++;
+
+      ddiEvent.subscribe(
+        callback,
+        qualifier: 'future_fitler_event',
+        filter: (int v) async {
+          await Future.delayed(const Duration(milliseconds: 10));
+          return v % 2 == 0;
+        },
+      );
+
+      expect(ddiEvent.isRegistered(qualifier: 'future_fitler_event'), isTrue);
+      final List<Future<void>> f = [];
+
+      for (int i = 1; i <= 5; i++) {
+        f.add(ddiEvent.fireWait(i, qualifier: 'future_fitler_event'));
+      }
+
+      await Future.wait(f);
+      expect(count, 2);
+
+      ddiEvent.unsubscribe(callback, qualifier: 'future_fitler_event');
+
+      expect(ddiEvent.isRegistered(qualifier: 'future_fitler_event'), isFalse);
+    });
   });
 }
