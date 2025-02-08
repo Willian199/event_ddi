@@ -1,5 +1,5 @@
 # Event DDI Package
-A Dart package designed for event management. It provides tools to create, destroy, and listen to events, making it easier to decouple different parts of your application and handle communication efficiently.
+
 
 
 <!--
@@ -24,14 +24,7 @@ and the Flutter guide for
 [![License](https://img.shields.io/github/license/Willian199/event_ddi?logo=open-source-initiative&logoColor=green)](https://github.com/Willian199/event_ddi/blob/master/LICENSE)
 
 
-## Packages
-
-- [Flutter DDI](https://pub.dev/packages/flutter_ddi) - This package is designed to facilitate the dependency injection process in your Flutter application.
-
-## Projects
-
-- [Budgetopia](https://github.com/Willian199/budgetopia) - An intuitive personal finance app that helps users track expenses.
-
+A Dart package designed for event management. It provides tools to create, destroy, and listen to events, making it easier to decouple different parts of your application and handle communication efficiently.
 
 ## Features
 
@@ -44,6 +37,15 @@ and the Flutter guide for
 - Replay and Undo: Support for event replay and undo functionalities.
 
 - Qualifiers: Use qualifiers to distinguish between different event types.
+
+## Packages
+
+- [Flutter DDI](https://pub.dev/packages/flutter_ddi) - This package is designed to facilitate the dependency injection process in your Flutter application.
+- [Dart DDI](https://pub.dev/packages/dart_ddi) - This package is a robust and flexible dependency injection mechanism.
+
+## Projects
+
+- [Budgetopia](https://github.com/Willian199/budgetopia) - An intuitive personal finance app that helps users track expenses.
 
 ## Event Management Guide
 
