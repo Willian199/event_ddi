@@ -22,7 +22,10 @@ void eventTest() {
 
       DDIEvent.instance.unsubscribe(eventFunction, qualifier: 'testQualifier');
 
-      expect(() => DDIEvent.instance.fire(1, qualifier: 'testQualifier', canReplay: false), throwsA(isA<EventNotFoundException>()));
+      expect(
+          () => DDIEvent.instance
+              .fire(1, qualifier: 'testQualifier', canReplay: false),
+          throwsA(isA<EventNotFoundException>()));
 
       expect(ddiEvent.isRegistered(qualifier: 'testQualifier'), isFalse);
     });
@@ -41,7 +44,8 @@ void eventTest() {
 
       DDIEvent.instance.unsubscribe(eventFunction);
 
-      expect(() => DDIEvent.instance.fire(1, canReplay: false), throwsA(isA<EventNotFoundException>()));
+      expect(() => DDIEvent.instance.fire(1, canReplay: false),
+          throwsA(isA<EventNotFoundException>()));
 
       expect(ddiEvent.isRegistered<int>(), isFalse);
     });
@@ -50,7 +54,8 @@ void eventTest() {
       int localValue = 0;
       void eventFunction(int value) => localValue += value;
 
-      DDIEvent.instance.subscribe<int>(eventFunction, unsubscribeAfterFire: true);
+      DDIEvent.instance
+          .subscribe<int>(eventFunction, unsubscribeAfterFire: true);
 
       expect(localValue, 0);
 
@@ -58,7 +63,8 @@ void eventTest() {
 
       expect(localValue, 1);
 
-      expect(() => DDIEvent.instance.fire(1, canReplay: false), throwsA(isA<EventNotFoundException>()));
+      expect(() => DDIEvent.instance.fire(1, canReplay: false),
+          throwsA(isA<EventNotFoundException>()));
 
       expect(ddiEvent.isRegistered<int>(), isFalse);
     });
@@ -151,7 +157,8 @@ void eventTest() {
       expect(ddiEvent.isRegistered<int>(), isFalse);
       expect(localValue, 0);
 
-      expect(() => DDIEvent.instance.fire(1, canReplay: false), throwsA(isA<EventNotFoundException>()));
+      expect(() => DDIEvent.instance.fire(1, canReplay: false),
+          throwsA(isA<EventNotFoundException>()));
 
       expect(localValue, 0);
     });
@@ -173,7 +180,8 @@ void eventTest() {
       int localValue = 0;
       void eventFunction(int value) => localValue += value;
 
-      DDIEvent.instance.subscribe(eventFunction, qualifier: 'testQualifier', canUnsubscribe: false);
+      DDIEvent.instance.subscribe(eventFunction,
+          qualifier: 'testQualifier', canUnsubscribe: false);
 
       expect(localValue, 0);
 
@@ -212,7 +220,8 @@ void eventTest() {
         localValue += value;
       }
 
-      DDIEvent.instance.subscribeIsolate(eventFunction, qualifier: 'isolate_Qualifier');
+      DDIEvent.instance
+          .subscribeIsolate(eventFunction, qualifier: 'isolate_Qualifier');
 
       expect(localValue, 0);
 
@@ -220,7 +229,8 @@ void eventTest() {
 
       expect(localValue, 0);
 
-      DDIEvent.instance.unsubscribe(eventFunction, qualifier: 'isolate_Qualifier');
+      DDIEvent.instance
+          .unsubscribe(eventFunction, qualifier: 'isolate_Qualifier');
 
       expect(ddiEvent.isRegistered(qualifier: 'isolate_Qualifier'), isFalse);
     });
@@ -254,32 +264,38 @@ void eventTest() {
 
       DDIEvent.instance.unsubscribe<bool>(callback);
 
-      expect(() => DDIEvent.instance.fire<bool>(true, canReplay: false), throwsA(isA<EventNotFoundException>()));
+      expect(() => DDIEvent.instance.fire<bool>(true, canReplay: false),
+          throwsA(isA<EventNotFoundException>()));
 
       await expectLater(completer.future, doesNotComplete);
 
       expect(ddiEvent.isRegistered<bool>(), isFalse);
     });
 
-    test('subscribeAsync with qualifier and fire event with qualifier asynchronously', () async {
+    test(
+        'subscribeAsync with qualifier and fire event with qualifier asynchronously',
+        () async {
       final Completer<bool> asyncFunctionCompleter = Completer<bool>();
 
       void callback(bool value) {
         asyncFunctionCompleter.complete(value);
       }
 
-      DDIEvent.instance.subscribeAsync<bool>(callback, qualifier: 'test_qualifier');
+      DDIEvent.instance
+          .subscribeAsync<bool>(callback, qualifier: 'test_qualifier');
 
       DDIEvent.instance.fire<bool>(true, qualifier: 'test_qualifier');
 
       await expectLater(asyncFunctionCompleter.future, completion(isTrue));
 
-      DDIEvent.instance.unsubscribe<bool>(callback, qualifier: 'test_qualifier');
+      DDIEvent.instance
+          .unsubscribe<bool>(callback, qualifier: 'test_qualifier');
 
       expect(ddiEvent.isRegistered<bool>(qualifier: 'test_qualifier'), isFalse);
     });
 
-    test('subscribeAsync with canRegister and fire event based on canRegister', () async {
+    test('subscribeAsync with canRegister and fire event based on canRegister',
+        () async {
       final Completer<bool> asyncFunctionCompleter = Completer<bool>();
 
       void callback(bool value) async {
@@ -307,13 +323,16 @@ void eventTest() {
         asyncFunctionCompleter.complete(value);
       }
 
-      DDIEvent.instance.subscribeAsync<bool>(callback, unsubscribeAfterFire: true);
+      DDIEvent.instance
+          .subscribeAsync<bool>(callback, unsubscribeAfterFire: true);
 
       DDIEvent.instance.fire<bool>(true);
 
       await expectLater(asyncFunctionCompleter.future, completion(isTrue));
 
-      await expectLater(() => DDIEvent.instance.fire<bool>(true, canReplay: false), throwsA(isA<EventNotFoundException>()));
+      await expectLater(
+          () => DDIEvent.instance.fire<bool>(true, canReplay: false),
+          throwsA(isA<EventNotFoundException>()));
 
       expect(ddiEvent.isRegistered<bool>(), isFalse);
     });
@@ -367,7 +386,8 @@ void eventTest() {
         localValue += value;
       }
 
-      DDIEvent.instance.subscribe<int>(eventFunction, qualifier: 'removeAfterFire', unsubscribeAfterFire: true);
+      DDIEvent.instance.subscribe<int>(eventFunction,
+          qualifier: 'removeAfterFire', unsubscribeAfterFire: true);
 
       expect(localValue, 0);
 
@@ -375,15 +395,21 @@ void eventTest() {
 
       expect(localValue, 1);
 
-      expect(() => DDIEvent.instance.fireWait(1, qualifier: 'removeAfterFire', canReplay: false), throwsA(isA<EventNotFoundException>()));
+      expect(
+          () => DDIEvent.instance
+              .fireWait(1, qualifier: 'removeAfterFire', canReplay: false),
+          throwsA(isA<EventNotFoundException>()));
 
       expect(ddiEvent.isRegistered<int>(qualifier: 'removeAfterFire'), isFalse);
     });
 
-    test('Unsubscribe throws EventNotFoundException for event with qualifier not found', () {
+    test(
+        'Unsubscribe throws EventNotFoundException for event with qualifier not found',
+        () {
       void event(String value) => {};
 
-      expect(() => ddiEvent.unsubscribe<String>(event, qualifier: 'qualifier'), throwsA(isA<EventNotFoundException>()));
+      expect(() => ddiEvent.unsubscribe<String>(event, qualifier: 'qualifier'),
+          throwsA(isA<EventNotFoundException>()));
     });
   });
 }

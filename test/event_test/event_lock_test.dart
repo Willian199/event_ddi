@@ -39,7 +39,8 @@ void eventLockTest() {
         eventOrder.add(value);
       }
 
-      ddiEvent.subscribeAsync(callback, qualifier: 'concurrent_lock_event', lock: true);
+      ddiEvent.subscribeAsync(callback,
+          qualifier: 'concurrent_lock_event', lock: true);
 
       expect(ddiEvent.isRegistered(qualifier: 'concurrent_lock_event'), isTrue);
 
@@ -54,7 +55,8 @@ void eventLockTest() {
 
       ddiEvent.unsubscribe(callback, qualifier: 'concurrent_lock_event');
 
-      expect(ddiEvent.isRegistered(qualifier: 'concurrent_lock_event'), isFalse);
+      expect(
+          ddiEvent.isRegistered(qualifier: 'concurrent_lock_event'), isFalse);
     });
 
     test('Running Isolated event with lock', () async {
@@ -62,9 +64,11 @@ void eventLockTest() {
         await Future.delayed(Duration(milliseconds: (2000 / value).round()));
       }
 
-      ddiEvent.subscribeIsolate(callback, qualifier: 'concurrent_lock_isolate', lock: true);
+      ddiEvent.subscribeIsolate(callback,
+          qualifier: 'concurrent_lock_isolate', lock: true);
 
-      expect(ddiEvent.isRegistered(qualifier: 'concurrent_lock_isolate'), isTrue);
+      expect(
+          ddiEvent.isRegistered(qualifier: 'concurrent_lock_isolate'), isTrue);
 
       for (int i = 1; i <= 5; i++) {
         ddiEvent.fire(i, qualifier: 'concurrent_lock_isolate');
@@ -74,7 +78,8 @@ void eventLockTest() {
 
       ddiEvent.unsubscribe(callback, qualifier: 'concurrent_lock_isolate');
 
-      expect(ddiEvent.isRegistered(qualifier: 'concurrent_lock_isolate'), isFalse);
+      expect(
+          ddiEvent.isRegistered(qualifier: 'concurrent_lock_isolate'), isFalse);
     });
 
     test('Subscribe and Fire event with onError', () async {
@@ -151,7 +156,8 @@ void eventLockTest() {
         onError: (_, __, ___) => eventOrder.add(-1),
       );
 
-      expect(ddiEvent.isRegistered(qualifier: 'concurrent_event_with_error'), isTrue);
+      expect(ddiEvent.isRegistered(qualifier: 'concurrent_event_with_error'),
+          isTrue);
 
       for (int i = 1; i <= 5; i++) {
         ddiEvent.fire(i, qualifier: 'concurrent_event_with_error');
@@ -167,7 +173,8 @@ void eventLockTest() {
 
       ddiEvent.unsubscribe(callback, qualifier: 'concurrent_event_with_error');
 
-      expect(ddiEvent.isRegistered(qualifier: 'concurrent_event_with_error'), isFalse);
+      expect(ddiEvent.isRegistered(qualifier: 'concurrent_event_with_error'),
+          isFalse);
     });
 
     test('Running event with lock and onComplete', () async {
@@ -186,7 +193,8 @@ void eventLockTest() {
         onComplete: () => eventOrder.add(0),
       );
 
-      expect(ddiEvent.isRegistered(qualifier: 'concurrent_event_with_complete'), isTrue);
+      expect(ddiEvent.isRegistered(qualifier: 'concurrent_event_with_complete'),
+          isTrue);
 
       for (int i = 1; i <= 5; i++) {
         ddiEvent.fire(i, qualifier: 'concurrent_event_with_complete');
@@ -205,9 +213,11 @@ void eventLockTest() {
       expect(eventOrder[8], 5);
       expect(eventOrder[9], 0);
 
-      ddiEvent.unsubscribe(callback, qualifier: 'concurrent_event_with_complete');
+      ddiEvent.unsubscribe(callback,
+          qualifier: 'concurrent_event_with_complete');
 
-      expect(ddiEvent.isRegistered(qualifier: 'concurrent_event_with_complete'), isFalse);
+      expect(ddiEvent.isRegistered(qualifier: 'concurrent_event_with_complete'),
+          isFalse);
     });
 
     test('Running event with lock, onError and onComplete', () async {
@@ -230,7 +240,10 @@ void eventLockTest() {
         onComplete: () => eventOrder.add(0),
       );
 
-      expect(ddiEvent.isRegistered(qualifier: 'concurrent_event_with_error_complete'), isTrue);
+      expect(
+          ddiEvent.isRegistered(
+              qualifier: 'concurrent_event_with_error_complete'),
+          isTrue);
 
       for (int i = 1; i <= 5; i++) {
         ddiEvent.fire(i, qualifier: 'concurrent_event_with_error_complete');
@@ -249,9 +262,13 @@ void eventLockTest() {
       expect(eventOrder[8], -1);
       expect(eventOrder[9], 0);
 
-      ddiEvent.unsubscribe(callback, qualifier: 'concurrent_event_with_error_complete');
+      ddiEvent.unsubscribe(callback,
+          qualifier: 'concurrent_event_with_error_complete');
 
-      expect(ddiEvent.isRegistered(qualifier: 'concurrent_event_with_error_complete'), isFalse);
+      expect(
+          ddiEvent.isRegistered(
+              qualifier: 'concurrent_event_with_error_complete'),
+          isFalse);
     });
 
     test('Running Isolated event with lock and onError', () async {
@@ -263,11 +280,15 @@ void eventLockTest() {
         throw Exception();
       }
 
-      ddiEvent.subscribeIsolate(callback, qualifier: 'concurrent_lock_isolate_onError', lock: true, onError: (_, __, ___) {
+      ddiEvent.subscribeIsolate(callback,
+          qualifier: 'concurrent_lock_isolate_onError',
+          lock: true, onError: (_, __, ___) {
         count++;
       });
 
-      expect(ddiEvent.isRegistered(qualifier: 'concurrent_lock_isolate_onError'), isTrue);
+      expect(
+          ddiEvent.isRegistered(qualifier: 'concurrent_lock_isolate_onError'),
+          isTrue);
 
       for (int i = 1; i <= 5; i++) {
         ddiEvent.fire(i, qualifier: 'concurrent_lock_isolate_onError');
@@ -277,9 +298,12 @@ void eventLockTest() {
 
       expect(count, 5);
 
-      ddiEvent.unsubscribe(callback, qualifier: 'concurrent_lock_isolate_onError');
+      ddiEvent.unsubscribe(callback,
+          qualifier: 'concurrent_lock_isolate_onError');
 
-      expect(ddiEvent.isRegistered(qualifier: 'concurrent_lock_isolate_onError'), isFalse);
+      expect(
+          ddiEvent.isRegistered(qualifier: 'concurrent_lock_isolate_onError'),
+          isFalse);
     });
 
     test('Running Isolated event with lock and onComplete', () async {
@@ -291,11 +315,16 @@ void eventLockTest() {
         throw Exception();
       }
 
-      ddiEvent.subscribeIsolate(callback, qualifier: 'concurrent_lock_isolate_onComplete', lock: true, onComplete: () {
+      ddiEvent.subscribeIsolate(callback,
+          qualifier: 'concurrent_lock_isolate_onComplete',
+          lock: true, onComplete: () {
         count++;
       });
 
-      expect(ddiEvent.isRegistered(qualifier: 'concurrent_lock_isolate_onComplete'), isTrue);
+      expect(
+          ddiEvent.isRegistered(
+              qualifier: 'concurrent_lock_isolate_onComplete'),
+          isTrue);
 
       for (int i = 1; i <= 5; i++) {
         ddiEvent.fire(i, qualifier: 'concurrent_lock_isolate_onComplete');
@@ -305,9 +334,13 @@ void eventLockTest() {
 
       expect(count, 5);
 
-      ddiEvent.unsubscribe(callback, qualifier: 'concurrent_lock_isolate_onComplete');
+      ddiEvent.unsubscribe(callback,
+          qualifier: 'concurrent_lock_isolate_onComplete');
 
-      expect(ddiEvent.isRegistered(qualifier: 'concurrent_lock_isolate_onComplete'), isFalse);
+      expect(
+          ddiEvent.isRegistered(
+              qualifier: 'concurrent_lock_isolate_onComplete'),
+          isFalse);
     });
 
     test('Running multiples event with lock', () async {
@@ -332,8 +365,10 @@ void eventLockTest() {
       }
 
       ddiEvent.subscribe(callback, qualifier: 'multiple_events', lock: true);
-      ddiEvent.subscribeAsync(callbackAsync, qualifier: 'multiple_events', lock: true);
-      ddiEvent.subscribeIsolate(callbackIsolate, qualifier: 'multiple_events', lock: true);
+      ddiEvent.subscribeAsync(callbackAsync,
+          qualifier: 'multiple_events', lock: true);
+      ddiEvent.subscribeIsolate(callbackIsolate,
+          qualifier: 'multiple_events', lock: true);
 
       expect(ddiEvent.isRegistered(qualifier: 'multiple_events'), isTrue);
 
@@ -384,8 +419,10 @@ void eventLockTest() {
       }
 
       ddiEvent.subscribe(callback, qualifier: 'multiple_events', lock: true);
-      ddiEvent.subscribeAsync(callbackAsync, qualifier: 'multiple_events', lock: true);
-      ddiEvent.subscribeIsolate(callbackIsolate, qualifier: 'multiple_events', lock: true);
+      ddiEvent.subscribeAsync(callbackAsync,
+          qualifier: 'multiple_events', lock: true);
+      ddiEvent.subscribeIsolate(callbackIsolate,
+          qualifier: 'multiple_events', lock: true);
 
       expect(ddiEvent.isRegistered(qualifier: 'multiple_events'), isTrue);
 

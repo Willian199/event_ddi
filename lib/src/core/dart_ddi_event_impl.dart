@@ -136,15 +136,19 @@ class _DDIEventImpl implements DDIEvent {
     int maxRetry = 0,
     FutureOr<bool> Function(EventTypeT)? filter,
   }) async {
-    assert((!autoRun && defaultValue == null) || (autoRun && defaultValue != null), 'You should provide a default value when using autoRun.');
+    assert(
+        (!autoRun && defaultValue == null) || (autoRun && defaultValue != null),
+        'You should provide a default value when using autoRun.');
 
     assert(maxRetry >= 0, 'maxRetry should be greater or equal to 0');
 
     assert(priority >= 0, 'Priority cannot be negative.');
 
-    assert(retryInterval == null || retryInterval > Duration.zero, 'retryInterval should be greater than Duration.zero.');
+    assert(retryInterval == null || retryInterval > Duration.zero,
+        'retryInterval should be greater than Duration.zero.');
 
-    assert((lock && !autoRun) || (!lock), 'Not able to use lock and autoRun at the same time.');
+    assert((lock && !autoRun) || (!lock),
+        'Not able to use lock and autoRun at the same time.');
 
     bool shouldRegister = true;
 
@@ -164,14 +168,16 @@ class _DDIEventImpl implements DDIEvent {
 
       _events.putIfAbsent(effectiveQualifierName, () => []);
 
-      final existingEvents = _events[effectiveQualifierName]!.cast<Event<EventTypeT>>();
+      final existingEvents =
+          _events[effectiveQualifierName]!.cast<Event<EventTypeT>>();
 
       if (existingEvents.isNotEmpty && autoRun) {
         throw EventNotAllowedException(
             'Not allowed to register multiple events with the same qualifier ($effectiveQualifierName) where using autoRun.');
       }
 
-      final isDuplicate = existingEvents.any((existingEvent) => existingEvent.event == event);
+      final isDuplicate =
+          existingEvents.any((existingEvent) => existingEvent.event == event);
 
       if (!isDuplicate) {
         existingEvents.add(
@@ -204,12 +210,14 @@ class _DDIEventImpl implements DDIEvent {
             final bool isFinite = maxRetry > 0;
 
             Timer.periodic(retryInterval, (timer) async {
-              if (!isRegistered<EventTypeT>(qualifier: effectiveQualifierName)) {
+              if (!isRegistered<EventTypeT>(
+                  qualifier: effectiveQualifierName)) {
                 timer.cancel();
                 return;
               }
 
-              await fireWait<EventTypeT>(defaultValue, qualifier: effectiveQualifierName, canReplay: false);
+              await fireWait<EventTypeT>(defaultValue,
+                  qualifier: effectiveQualifierName, canReplay: false);
 
               if (isFinite) {
                 if (maxRetry <= 1) {
@@ -221,7 +229,8 @@ class _DDIEventImpl implements DDIEvent {
               }
             });
           } else {
-            await fireWait<EventTypeT>(defaultValue, qualifier: effectiveQualifierName);
+            await fireWait<EventTypeT>(defaultValue,
+                qualifier: effectiveQualifierName);
           }
         }
       }
@@ -230,10 +239,13 @@ class _DDIEventImpl implements DDIEvent {
     return;
   }
 
-  void _removeEvents<EventTypeT extends Object>(void Function(EventTypeT) event, Object effectiveQualifierName) {
+  void _removeEvents<EventTypeT extends Object>(
+      void Function(EventTypeT) event, Object effectiveQualifierName) {
     if (_events[effectiveQualifierName] case final eventsList?) {
       if (eventsList.isNotEmpty) {
-        eventsList.cast<Event<EventTypeT>>().removeWhere((e) => e.canUnsubscribe && e.event == event);
+        eventsList
+            .cast<Event<EventTypeT>>()
+            .removeWhere((e) => e.canUnsubscribe && e.event == event);
       }
 
       if (eventsList.isEmpty) {
@@ -252,7 +264,9 @@ class _DDIEventImpl implements DDIEvent {
 
     if (_events[effectiveQualifierName] case final eventsList?) {
       if (eventsList.isNotEmpty) {
-        eventsList.cast<Event<EventTypeT>>().removeWhere((e) => e.canUnsubscribe && e.event == event);
+        eventsList
+            .cast<Event<EventTypeT>>()
+            .removeWhere((e) => e.canUnsubscribe && e.event == event);
       }
 
       if (eventsList.isEmpty) {
@@ -283,7 +297,8 @@ class _DDIEventImpl implements DDIEvent {
     if (eventsList != null && eventsList.isNotEmpty) {
       final eventsToRemove = <Event<EventTypeT>>[];
 
-      for (final Event<EventTypeT> event in eventsList.cast<Event<EventTypeT>>()) {
+      for (final Event<EventTypeT> event
+          in eventsList.cast<Event<EventTypeT>>()) {
         _validateFilter(event, value);
 
         if (event.unsubscribeAfterFire) {
@@ -304,9 +319,11 @@ class _DDIEventImpl implements DDIEvent {
     }
   }
 
-  void _validateHistory<EventTypeT extends Object>(EventTypeT value, Object effectiveQualifierName, bool canReplay) {
+  void _validateHistory<EventTypeT extends Object>(
+      EventTypeT value, Object effectiveQualifierName, bool canReplay) {
     if (canReplay) {
-      _valueHistory.putIfAbsent(effectiveQualifierName, () => History<EventTypeT>());
+      _valueHistory.putIfAbsent(
+          effectiveQualifierName, () => History<EventTypeT>());
       final history = _valueHistory[effectiveQualifierName]!;
 
       // Add the value to the undo stack
@@ -320,7 +337,8 @@ class _DDIEventImpl implements DDIEvent {
     }
   }
 
-  FutureOr<void> _execFire<EventTypeT extends Object>(Event<EventTypeT> event, EventTypeT value) {
+  FutureOr<void> _execFire<EventTypeT extends Object>(
+      Event<EventTypeT> event, EventTypeT value) {
     if (event.lock case final EventLock eventLock?) {
       return eventLock.lock(
         () async => event.mode.execute<EventTypeT>(event, value),
@@ -330,17 +348,22 @@ class _DDIEventImpl implements DDIEvent {
     return event.mode.execute<EventTypeT>(event, value);
   }
 
-  FutureOr<void> _validateFilter<EventTypeT extends Object>(Event<EventTypeT> event, EventTypeT value) async {
+  FutureOr<void> _validateFilter<EventTypeT extends Object>(
+      Event<EventTypeT> event, EventTypeT value) async {
     return switch (event.filter) {
       final bool Function(EventTypeT) filter => {
           if (filter(value)) _execFire(event, value),
         },
-      final Future<bool> Function(EventTypeT) filter when event.mode == EventMode.normal => filter(value).then((result) {
+      final Future<bool> Function(EventTypeT) filter
+          when event.mode == EventMode.normal =>
+        filter(value).then((result) {
           if (result) {
             _execFire(event, value);
           }
         }),
-      final Future<bool> Function(EventTypeT) filter when event.mode != EventMode.normal => {
+      final Future<bool> Function(EventTypeT) filter
+          when event.mode != EventMode.normal =>
+        {
           if (await filter(value)) await _execFire(event, value),
         },
       _ => _execFire(event, value),
@@ -355,7 +378,8 @@ class _DDIEventImpl implements DDIEvent {
   }) async {
     final effectiveQualifierName = qualifier ?? EventTypeT;
 
-    final List<Event<Object>> eventsList = List.from(_events[effectiveQualifierName] ?? []);
+    final List<Event<Object>> eventsList =
+        List.from(_events[effectiveQualifierName] ?? []);
 
     if (eventsList.isEmpty && !canReplay) {
       throw EventNotFoundException(effectiveQualifierName.toString());
@@ -396,7 +420,8 @@ class _DDIEventImpl implements DDIEvent {
   Future<void> undo<EventTypeT extends Object>({Object? qualifier}) async {
     final effectiveQualifierName = qualifier ?? EventTypeT;
 
-    if (_valueHistory[effectiveQualifierName] case final history? when history.undoStack.isNotEmpty) {
+    if (_valueHistory[effectiveQualifierName] case final history?
+        when history.undoStack.isNotEmpty) {
       // Move the last value to the redo stack
       final lastValue = history.undoStack.removeLast();
 
@@ -421,7 +446,8 @@ class _DDIEventImpl implements DDIEvent {
   Future<void> redo<EventTypeT extends Object>({Object? qualifier}) async {
     final effectiveQualifierName = qualifier ?? EventTypeT;
 
-    if (_valueHistory[effectiveQualifierName] case final history? when history.redoStack.isNotEmpty) {
+    if (_valueHistory[effectiveQualifierName] case final history?
+        when history.redoStack.isNotEmpty) {
       // Remove the last value from the redo stack
       final redoValue = history.redoStack.removeLast();
 

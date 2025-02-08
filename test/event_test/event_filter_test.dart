@@ -229,7 +229,8 @@ void eventFilterTest() {
       expect(ddiEvent.isRegistered(qualifier: 'async_event'), isFalse);
     });
 
-    test('Subscribe future and fireWait event with async filter and lock', () async {
+    test('Subscribe future and fireWait event with async filter and lock',
+        () async {
       int count = 0;
 
       void callback(int value) async {
